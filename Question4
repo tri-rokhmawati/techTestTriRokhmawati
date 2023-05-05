@@ -1,0 +1,45 @@
+import requests
+import unittest
+
+
+class TestReqresAPI(unittest.TestCase):
+
+    def test_list_users(self):
+        url = "https://reqres.in/api/users"
+        response = requests.get(url)
+        self.assertEqual(response.status_code, 200)
+        response_data = response.json()
+        self.assertIn("data", response_data)
+        self.assertGreater(len(response_data["data"]), 0)
+
+    def test_register_successful(self):
+        url = "https://reqres.in/api/register"
+        payload = {"email": "eve.holt@reqres.in", "password": "pistol"}
+        response = requests.post(url, json=payload)
+        self.assertEqual(response.status_code, 200)
+        response_data = response.json()
+        self.assertIn("token", response_data)
+
+    def test_register_unsuccessful(self):
+        url = "https://reqres.in/api/register"
+        payload = {"email": "sydney@fife"}
+        response = requests.post(url, json=payload)
+        self.assertEqual(response.status_code, 400)
+        response_data = response.json()
+        self.assertIn("error", response_data)
+
+    def test_login_successful(self):
+        url = "https://reqres.in/api/login"
+        payload = {"email": "eve.holt@reqres.in", "password": "cityslicka"}
+        response = requests.post(url, json=payload)
+        self.assertEqual(response.status_code, 200)
+        response_data = response.json()
+        self.assertIn("token", response_data)
+
+    def test_login_unsuccessful(self):
+        url = "https://reqres.in/api/login"
+        payload = {"email": "peter@klaven"}
+        response = requests.post(url, json=payload)
+        self.assertEqual(response.status_code, 400)
+        response_data = response.json()
+        self.assertIn("error", response_data)
