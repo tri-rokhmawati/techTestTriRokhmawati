@@ -1,0 +1,19 @@
+-- Question 3. Write database query for below based on the table shown :
+
+--a. Display all detail in table “order” from low price to high price
+SELECT * FROM `order` ORDER BY amount ASC;
+
+--b. Display the cust_name who purchased the prod_id A101 and A103
+SELECT c.cust_name
+FROM Customer c
+JOIN OrderInfo o ON c.id = o.cust_id
+WHERE o.prod_id IN ('A101', 'A103')
+GROUP BY c.cust_name
+HAVING COUNT(DISTINCT o.prod_id) = 2;
+
+--c. Display All detail in table Product purchased by Budi
+SELECT o.id AS order_id, o.cust_id, o.amount, o.prod_id, p.prod_name, p.prod_amount, p.vendor_id 
+FROM orders o 
+JOIN products p ON o.prod_id = p.id 
+JOIN customers c ON o.cust_id = c.id 
+WHERE c.cust_name = 'budi';
